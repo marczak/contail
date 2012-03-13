@@ -20,10 +20,10 @@
 		5A453193150F811000CC8045 /* AppKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AppKit.framework; path = System/Library/Frameworks/AppKit.framework; sourceTree = SDKROOT; };
 		5A453194150F811000CC8045 /* CoreData.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreData.framework; path = System/Library/Frameworks/CoreData.framework; sourceTree = SDKROOT; };
 		5A453195150F811000CC8045 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
-		5A453198150F811000CC8045 /* contail-Info.plist */ = {isa = PBXFileReference; path = "contail-Info.plist"; sourceTree = "<group>"; };
+		5A453198150F811000CC8045 /* contail-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "contail-Info.plist"; sourceTree = "<group>"; };
 		5A45319A150F811000CC8045 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
-		5A45319C150F811000CC8045 /* contail-Prefix.pch */ = {isa = PBXFileReference; path = "contail-Prefix.pch"; sourceTree = "<group>"; };
-		5A45319D150F811000CC8045 /* contailView.h */ = {isa = PBXFileReference; path = contailView.h; sourceTree = "<group>"; };
+		5A45319C150F811000CC8045 /* contail-Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "contail-Prefix.pch"; sourceTree = "<group>"; };
+		5A45319D150F811000CC8045 /* contailView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = contailView.h; sourceTree = "<group>"; };
 		5A45319E150F811000CC8045 /* contailView.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = contailView.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
