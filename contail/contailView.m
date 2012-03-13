@@ -100,6 +100,12 @@
 
 - (BOOL)hasConfigureSheet
 {
+  return NO;
+}
+
+/*
+- (BOOL)hasConfigureSheet
+{
   return YES;
 }
 
@@ -199,5 +205,7 @@
     [panel release];
   }];
 }
+
+*/
 
 @end

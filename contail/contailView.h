@@ -24,10 +24,10 @@
 
 @property (readwrite, assign) NSString *filePath;
 
-- (void)loadConfigurationXib;
-- (IBAction)configOK: (id)sender;
-- (void)loadFromUserDefaults;
-- (void)setDefaultValues;
-- (IBAction)askUserForTextFile:(id)sender;
+//- (void)loadConfigurationXib;
+//- (IBAction)configOK: (id)sender;
+//- (void)loadFromUserDefaults;
+//- (void)setDefaultValues;
+//- (IBAction)askUserForTextFile:(id)sender;
 
 @end
