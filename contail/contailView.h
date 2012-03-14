@@ -18,7 +18,7 @@
   NSString *filePath;
   NSFileHandle *fileHandle;
   NSMutableString *currentData;
-  NSData *buffer;
+//  NSData *buffer;
   BOOL debug;
 }
 
@@ -26,8 +26,8 @@
 
 //- (void)loadConfigurationXib;
 //- (IBAction)configOK: (id)sender;
-//- (void)loadFromUserDefaults;
-//- (void)setDefaultValues;
+- (void)loadFromUserDefaults;
+- (void)setDefaultValues;
 //- (IBAction)askUserForTextFile:(id)sender;
 
 @end

@@ -15,10 +15,10 @@
 - (id)initWithFrame:(NSRect)frame isPreview:(BOOL)isPreview
 {
   self = [super initWithFrame:frame isPreview:isPreview];
-  if (self) {
-//    [self setDefaultValues];
-//    [self loadFromUserDefaults];
-//    currentData = [[NSMutableString alloc] init];
+  if (self) {    
+    [self setDefaultValues];
+    [self loadFromUserDefaults];
+
     [self setAnimationTimeInterval:1.3];
   }
   return self;
@@ -36,6 +36,7 @@
 
 - (void)drawRect:(NSRect)rect
 {
+  NSData *buffer;
   NSError *err = nil;
   [super drawRect:rect];
   
@@ -57,17 +58,23 @@
                                                    encoding:NSASCIIStringEncoding
                                                       error:&err];
   
-//  buffer = [fileHandle readDataToEndOfFile];
-//  if ([buffer length] > 0) {
-//    // remove buffer length from front of string
-//    NSRange range;
-//    range.location = 0;
-//    range.length = [buffer length];
-//    [currentData deleteCharactersInRange:range];
-//    // Append the new data
-//    NSString *newData = [[NSString alloc] initWithData:buffer encoding:NSUTF8StringEncoding];
-//    [currentData appendString:newData];
+//  if (! currentData) {
+//    NSLog(@"Initializing currentData");
+//    currentData = [[NSMutableString alloc] init];
 //  }
+//
+//
+  buffer = [fileHandle readDataToEndOfFile];
+  if ([buffer length] > 0) {
+    // remove buffer length from front of string
+    NSRange range;
+    range.location = 0;
+    range.length = [buffer length];
+    [currentData deleteCharactersInRange:range];
+    // Append the new data
+    NSString *newData = [[NSString alloc] initWithData:buffer encoding:NSUTF8StringEncoding];
+    [currentData appendString:newData];
+  }
   
   CTFontRef consoleFont = CTFontCreateWithName(CFSTR("Apple2Forever"), fontSize, NULL);
   NSDictionary *textAttrs = [NSDictionary dictionaryWithObjectsAndKeys:
@@ -75,7 +82,7 @@
                              consoleFont, kCTFontAttributeName,
                              [NSColor greenColor], (NSString *)kCTStrokeColorAttributeName,
                              nil];
-  NSAttributedString *attString = [[NSAttributedString alloc] initWithString:logs
+  NSAttributedString *attString = [[NSAttributedString alloc] initWithString:currentData
                                                                   attributes:textAttrs];
   CTFramesetterRef framesetter =
   CTFramesetterCreateWithAttributedString((CFAttributedStringRef)attString);
@@ -84,6 +91,8 @@
   
   CTFrameDraw(frame, context);
   
+//  buffer = nil;
+//  [buffer release];
   CFRelease(consoleFont);
   CFRelease(frame);
   CFRelease(path);
@@ -101,12 +110,6 @@
 - (BOOL)hasConfigureSheet
 {
   return NO;
-}
-
-/*
-- (BOOL)hasConfigureSheet
-{
-  return YES;
 }
 
 
@@ -171,12 +174,24 @@
 
 - (void)loadFromUserDefaults
 {
+  NSData *buffer;
+  long curOffset;
+  long rewindAmt;
+
 	NSUserDefaults *def = [ScreenSaverDefaults defaultsForModuleWithName: [[NSBundle bundleForClass: [self class]] bundleIdentifier]];
   debug = [def boolForKey: @"debug"];
   filePath = [def stringForKey:@"filePath"];
+
+  // Prep the initial read
   fileHandle = [NSFileHandle fileHandleForReadingAtPath:filePath];
   [fileHandle seekToEndOfFile];
-  [fileHandle seekToFileOffset:[fileHandle offsetInFile] - 5000];
+  curOffset = [fileHandle offsetInFile];
+  if (curOffset > 5000) {
+    rewindAmt = 5000;
+  } else {
+    rewindAmt = curOffset;
+  }
+  [fileHandle seekToFileOffset:[fileHandle offsetInFile] - rewindAmt];
   buffer = [fileHandle readDataToEndOfFile];
   currentData = [[NSMutableString alloc] initWithData:buffer encoding:NSUTF8StringEncoding];
 }
@@ -194,18 +209,11 @@
   [panel beginWithCompletionHandler:^(NSInteger result){
     if (result == NSFileHandlingPanelOKButton) {
       filePath = [[panel URLs] objectAtIndex:0];
-      fileHandle = [NSFileHandle fileHandleForReadingAtPath:filePath];
-      [fileHandle seekToEndOfFile];
-      [fileHandle seekToFileOffset:[fileHandle offsetInFile] - 5000];
-      buffer = [fileHandle readDataToEndOfFile];
-      currentData = [[NSMutableString alloc] initWithData:buffer encoding:NSUTF8StringEncoding];
       NSLog(@"From panel: %@", filePath);
     }
     
     [panel release];
   }];
 }
-
-*/
 
 @end
