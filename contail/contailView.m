@@ -19,7 +19,7 @@
     [self setDefaultValues];
     [self loadFromUserDefaults];
 
-    [self setAnimationTimeInterval:1.3];
+    [self setAnimationTimeInterval:2.3];
   }
   return self;
 }
@@ -37,7 +37,7 @@
 - (void)drawRect:(NSRect)rect
 {
   NSData *buffer;
-  NSError *err = nil;
+//  NSError *err = nil;
   [super drawRect:rect];
   
   // Draw a black background.
@@ -53,17 +53,7 @@
   // Set the drawing rect
   CGMutablePathRef path = CGPathCreateMutable();
   CGPathAddRect(path, NULL, self.bounds);
-  
-  NSString *logs = [[NSString alloc] initWithContentsOfFile:@"/etc/bashrc"
-                                                   encoding:NSASCIIStringEncoding
-                                                      error:&err];
-  
-//  if (! currentData) {
-//    NSLog(@"Initializing currentData");
-//    currentData = [[NSMutableString alloc] init];
-//  }
-//
-//
+
   buffer = [fileHandle readDataToEndOfFile];
   if ([buffer length] > 0) {
     // remove buffer length from front of string
@@ -91,8 +81,8 @@
   
   CTFrameDraw(frame, context);
   
-//  buffer = nil;
-//  [buffer release];
+  buffer = nil;
+  [buffer release];
   CFRelease(consoleFont);
   CFRelease(frame);
   CFRelease(path);
@@ -109,7 +99,7 @@
 
 - (BOOL)hasConfigureSheet
 {
-  return NO;
+  return YES;
 }
 
 
@@ -122,7 +112,7 @@
 	
 	NSString *vers = [[NSBundle bundleForClass: [self class]] objectForInfoDictionaryKey: @"CFBundleVersion"];
 	vers = [NSString stringWithFormat: @"version %@", vers];
-	[versionText setStringValue: vers];
+	[versionText setStringValue:vers];
 	
 	NSUserDefaults *def = [ScreenSaverDefaults defaultsForModuleWithName:
                          [[NSBundle bundleForClass:[self class]] bundleIdentifier]];
@@ -166,7 +156,7 @@
 	NSUserDefaults *def = [ScreenSaverDefaults defaultsForModuleWithName: [[NSBundle bundleForClass: [self class]] bundleIdentifier]];
 	[def registerDefaults:
    [NSDictionary dictionaryWithObjectsAndKeys:
-    [NSString stringWithString:@"/var/log/opendirectoryd.log"], @"filePath",
+    [NSString stringWithString:@"/var/log/system.log"], @"filePath",
     [NSNumber numberWithBool:NO], @"debug",
     nil]];
 }
@@ -186,8 +176,9 @@
   fileHandle = [NSFileHandle fileHandleForReadingAtPath:filePath];
   [fileHandle seekToEndOfFile];
   curOffset = [fileHandle offsetInFile];
-  if (curOffset > 5000) {
-    rewindAmt = 5000;
+  // Load 5K or less
+  if (curOffset > 5120) {
+    rewindAmt = 5120;
   } else {
     rewindAmt = curOffset;
   }
