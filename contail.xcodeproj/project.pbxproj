@@ -11,8 +11,8 @@
 		5A453191150F811000CC8045 /* ScreenSaver.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5A453190150F811000CC8045 /* ScreenSaver.framework */; };
 		5A45319B150F811000CC8045 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 5A453199150F811000CC8045 /* InfoPlist.strings */; };
 		5A45319F150F811000CC8045 /* contailView.m in Sources */ = {isa = PBXBuildFile; fileRef = 5A45319E150F811000CC8045 /* contailView.m */; };
+		5A806AAA1511A4590005B07D /* ConfigSheet.xib in Resources */ = {isa = PBXBuildFile; fileRef = 5A806AA91511A4590005B07D /* ConfigSheet.xib */; };
 		5ABC47E0150FFF8200FFC0C8 /* Apple2Forever.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 5ABC47DF150FFF8200FFC0C8 /* Apple2Forever.ttf */; };
-		5ABC47E4150FFFBD00FFC0C8 /* configureSheet.xib in Resources */ = {isa = PBXBuildFile; fileRef = 5ABC47E3150FFFBD00FFC0C8 /* configureSheet.xib */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -27,8 +27,8 @@
 		5A45319C150F811000CC8045 /* contail-Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "contail-Prefix.pch"; sourceTree = "<group>"; };
 		5A45319D150F811000CC8045 /* contailView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = contailView.h; sourceTree = "<group>"; };
 		5A45319E150F811000CC8045 /* contailView.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = contailView.m; sourceTree = "<group>"; };
+		5A806AA91511A4590005B07D /* ConfigSheet.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = ConfigSheet.xib; sourceTree = "<group>"; };
 		5ABC47DF150FFF8200FFC0C8 /* Apple2Forever.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; name = Apple2Forever.ttf; path = ../../../../Library/Fonts/Apple2Forever.ttf; sourceTree = "<group>"; };
-		5ABC47E3150FFFBD00FFC0C8 /* configureSheet.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = configureSheet.xib; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -106,7 +106,7 @@
 			isa = PBXGroup;
 			children = (
 				5ABC47DF150FFF8200FFC0C8 /* Apple2Forever.ttf */,
-				5ABC47E3150FFFBD00FFC0C8 /* configureSheet.xib */,
+				5A806AA91511A4590005B07D /* ConfigSheet.xib */,
 			);
 			name = Resources;
 			sourceTree = "<group>";
@@ -176,7 +176,7 @@
 			files = (
 				5A45319B150F811000CC8045 /* InfoPlist.strings in Resources */,
 				5ABC47E0150FFF8200FFC0C8 /* Apple2Forever.ttf in Resources */,
-				5ABC47E4150FFFBD00FFC0C8 /* configureSheet.xib in Resources */,
+				5A806AAA1511A4590005B07D /* ConfigSheet.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

@@ -108,7 +108,7 @@
   if (debug) {
     NSLog(@"In loadConfigurationXib");
   }
-	[NSBundle loadNibNamed: @"configureSheet" owner: self];
+	[NSBundle loadNibNamed: @"ConfigSheet" owner:self];
 	
 	NSString *vers = [[NSBundle bundleForClass: [self class]] objectForInfoDictionaryKey: @"CFBundleVersion"];
 	vers = [NSString stringWithFormat: @"version %@", vers];
