@@ -45,7 +45,7 @@
   NSSize windowSize = [[[self window] contentView] frame].size;
   float fontSize = windowSize.height/75.0f;  
   
-  // Initialize the text matrix to a known value
+  // Initialize the text matrix
 	CGContextRef context = (CGContextRef)[[NSGraphicsContext currentContext] graphicsPort];
 	CGContextSetTextMatrix(context, CGAffineTransformIdentity);
   
@@ -56,7 +56,7 @@
   // Grab the newest data
   buffer = [fileHandle readDataToEndOfFile];
   if ([buffer length] > 0) {
-    // remove buffer length from front of string
+    // remove a 'buffer length' from front of string
     NSRange range;
     range.location = 0;
     range.length = [buffer length];
