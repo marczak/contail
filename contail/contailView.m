@@ -94,18 +94,23 @@
   
   // Plain old draw methods for status line
   NSColor *fg = [NSColor greenColor];
-  NSDate *now = [[NSDate alloc] initWithTimeIntervalSinceNow:0];
   
-  NSString *statusLine = [[NSString alloc] initWithFormat:@"%@", now];
+  NSDateFormatter *dateFormatter = [[[NSDateFormatter alloc] init] autorelease];
+  [dateFormatter setLocale:[[[NSLocale alloc] initWithLocaleIdentifier:@"en_US_POSIX"] autorelease]];
+  [dateFormatter setDateFormat:@"EEE, d MMM yyyy HH:mm:ss z"];
+  [dateFormatter setTimeZone:[NSTimeZone systemTimeZone]];
+  NSDate *date = [NSDate date];
+  NSString *dateString = [dateFormatter stringFromDate:date];
+  
   NSFont* font = [NSFont fontWithName: @"Apple2Forever" size:fontSize];
   
   NSDictionary *attrs = [NSDictionary dictionaryWithObjectsAndKeys:
                          font, NSFontAttributeName,
                          fg, NSForegroundColorAttributeName, nil];
   
-  NSSize statusSize = [statusLine sizeWithAttributes:attrs];
+  NSSize statusSize = [dateString sizeWithAttributes:attrs];
   
-  [statusLine drawAtPoint:NSMakePoint(windowSize.width - statusSize.width, windowSize.height - (windowSize.height - statusSize.height)) withAttributes:attrs];
+  [dateString drawAtPoint:NSMakePoint(windowSize.width - statusSize.width, windowSize.height - (windowSize.height - statusSize.height)) withAttributes:attrs];
   
   buffer = nil;
   [buffer release];
