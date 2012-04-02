@@ -16,6 +16,8 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		5A3573D1152A076F006AE083 /* README.md */ = {isa = PBXFileReference; lastKnownFileType = text; path = README.md; sourceTree = SOURCE_ROOT; };
+		5A3573D2152A0816006AE083 /* LICENSE */ = {isa = PBXFileReference; lastKnownFileType = text; path = LICENSE; sourceTree = SOURCE_ROOT; };
 		5A45318B150F811000CC8045 /* contail.saver */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = contail.saver; sourceTree = BUILT_PRODUCTS_DIR; };
 		5A45318E150F811000CC8045 /* Cocoa.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Cocoa.framework; path = System/Library/Frameworks/Cocoa.framework; sourceTree = SDKROOT; };
 		5A453190150F811000CC8045 /* ScreenSaver.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = ScreenSaver.framework; path = System/Library/Frameworks/ScreenSaver.framework; sourceTree = SDKROOT; };
@@ -95,6 +97,8 @@
 		5A453197150F811000CC8045 /* Supporting Files */ = {
 			isa = PBXGroup;
 			children = (
+				5A3573D1152A076F006AE083 /* README.md */,
+				5A3573D2152A0816006AE083 /* LICENSE */,
 				5A453198150F811000CC8045 /* contail-Info.plist */,
 				5A453199150F811000CC8045 /* InfoPlist.strings */,
 				5A45319C150F811000CC8045 /* contail-Prefix.pch */,
