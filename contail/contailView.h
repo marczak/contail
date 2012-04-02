@@ -10,24 +10,24 @@
 
 @interface contailView : ScreenSaverView
 {  
-  IBOutlet NSWindow *configureSheet;
+  IBOutlet NSWindow *configSheet;
   IBOutlet NSObjectController *configController;
   IBOutlet NSTextField *versionText;
   IBOutlet NSTextField *filePathLabel;
   
+//  NSURL *filePath;
   NSString *filePath;
   NSFileHandle *fileHandle;
   NSMutableString *currentData;
-//  NSData *buffer;
   BOOL debug;
 }
 
 @property (readwrite, assign) NSString *filePath;
 
-//- (void)loadConfigurationXib;
-//- (IBAction)configOK: (id)sender;
+- (void)loadConfigurationXib;
+- (IBAction)configOK: (id)sender;
 - (void)loadFromUserDefaults;
 - (void)setDefaultValues;
-//- (IBAction)askUserForTextFile:(id)sender;
+- (IBAction)askUserForTextFile:(id)sender;
 
 @end

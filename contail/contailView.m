@@ -37,7 +37,6 @@
 - (void)drawRect:(NSRect)rect
 {
   NSData *buffer;
-//  NSError *err = nil;
   [super drawRect:rect];
   
   // Draw a black background.
@@ -54,6 +53,7 @@
   CGMutablePathRef path = CGPathCreateMutable();
   CGPathAddRect(path, NULL, self.bounds);
 
+  // Grab the newest data
   buffer = [fileHandle readDataToEndOfFile];
   if ([buffer length] > 0) {
     // remove buffer length from front of string
@@ -74,12 +74,38 @@
                              nil];
   NSAttributedString *attString = [[NSAttributedString alloc] initWithString:currentData
                                                                   attributes:textAttrs];
+  // Will that overflow the text area?
+  NSSize logSize = [currentData sizeWithAttributes:textAttrs];
+  while (logSize.height > windowSize.height) {
+    // We need to lose some more from the top
+    NSRange range;
+    range.location = 0;
+    range.length = 180;
+    [currentData deleteCharactersInRange:range];
+    logSize = [currentData sizeWithAttributes:textAttrs];
+  }
+
   CTFramesetterRef framesetter =
   CTFramesetterCreateWithAttributedString((CFAttributedStringRef)attString);
   CTFrameRef frame =
   CTFramesetterCreateFrame(framesetter, CFRangeMake(0, [attString length]), path, NULL);
   
   CTFrameDraw(frame, context);
+  
+  // Plain old draw methods for status line
+  NSColor *fg = [NSColor greenColor];
+  NSDate *now = [[NSDate alloc] initWithTimeIntervalSinceNow:0];
+  
+  NSString *statusLine = [[NSString alloc] initWithFormat:@"%@", now];
+  NSFont* font = [NSFont fontWithName: @"Apple2Forever" size:fontSize];
+  
+  NSDictionary *attrs = [NSDictionary dictionaryWithObjectsAndKeys:
+                         font, NSFontAttributeName,
+                         fg, NSForegroundColorAttributeName, nil];
+  
+  NSSize statusSize = [statusLine sizeWithAttributes:attrs];
+  
+  [statusLine drawAtPoint:NSMakePoint(windowSize.width - statusSize.width, windowSize.height - (windowSize.height - statusSize.height)) withAttributes:attrs];
   
   buffer = nil;
   [buffer release];
@@ -89,11 +115,13 @@
   CFRelease(framesetter);
 }
 
+
 - (void)animateOneFrame
 {
   [self setNeedsDisplay:YES];
   return;
 }
+
 
 #pragma mark - Configuration Methods
 
@@ -112,27 +140,29 @@
 	
 	NSString *vers = [[NSBundle bundleForClass: [self class]] objectForInfoDictionaryKey: @"CFBundleVersion"];
 	vers = [NSString stringWithFormat: @"version %@", vers];
+  if (debug) {
+    NSLog(@"Got vers string from bundle: %@", vers);
+  }
 	[versionText setStringValue:vers];
+  [filePathLabel setStringValue:filePath];
 	
 	NSUserDefaults *def = [ScreenSaverDefaults defaultsForModuleWithName:
                          [[NSBundle bundleForClass:[self class]] bundleIdentifier]];
 	NSUserDefaultsController *controller = [[NSUserDefaultsController alloc] initWithDefaults:def initialValues:nil];
-	[configController setContent: controller];
+	[configController setContent:controller];
 	[controller release];
 }
 
 
 - (NSWindow*)configureSheet
 {
-  if(!configureSheet) {
-    if (debug) {
+  if( !configSheet ) {
+    if (debug)
       NSLog(@"Loading Xib.");
-    }
 		[self loadConfigurationXib];
   }
 	
-	return configureSheet;
-  return nil;
+	return configSheet;
 }
 
 
@@ -140,11 +170,13 @@
 {
   if (debug) {
     NSLog(@"In configOK");
+    NSLog(@"Saving controller: %@", [(NSUserDefaultsController *)[configController content] values]);
   }
+  [configController setValue:filePath forKeyPath:@"content.values.filePath"];
 	[(NSUserDefaultsController *)[configController content] save:sender];
 	[self loadFromUserDefaults];
   
-	[NSApp endSheet:configureSheet];
+	[NSApp endSheet:configSheet];
   
 	[self stopAnimation];
 	[self startAnimation];
@@ -153,10 +185,10 @@
 
 - (void)setDefaultValues
 {
-	NSUserDefaults *def = [ScreenSaverDefaults defaultsForModuleWithName: [[NSBundle bundleForClass: [self class]] bundleIdentifier]];
+	NSUserDefaults *def = [ScreenSaverDefaults defaultsForModuleWithName:[[NSBundle bundleForClass:[self class]] bundleIdentifier]];
 	[def registerDefaults:
    [NSDictionary dictionaryWithObjectsAndKeys:
-    [NSString stringWithString:@"/var/log/system.log"], @"filePath",
+    [NSString stringWithString:@"/var/log/opendirectoryd.log"], @"filePath",
     [NSNumber numberWithBool:NO], @"debug",
     nil]];
 }
@@ -168,9 +200,16 @@
   long curOffset;
   long rewindAmt;
 
-	NSUserDefaults *def = [ScreenSaverDefaults defaultsForModuleWithName: [[NSBundle bundleForClass: [self class]] bundleIdentifier]];
-  debug = [def boolForKey: @"debug"];
+	NSUserDefaults *def = [ScreenSaverDefaults defaultsForModuleWithName:[[NSBundle bundleForClass:[self class]] bundleIdentifier]];
+  if (debug) {
+    NSLog(@"In loadFromUserDefaults - entering with filePath of %@.", filePath);
+    NSLog(@"Registered def: %@", def);
+  }
+  debug = [def boolForKey:@"debug"];
   filePath = [def stringForKey:@"filePath"];
+  if (debug) {
+    NSLog(@"Loaded filePath from defaults - got: %@", filePath);
+  }
 
   // Prep the initial read
   fileHandle = [NSFileHandle fileHandleForReadingAtPath:filePath];
@@ -189,18 +228,21 @@
 
 
 - (IBAction)askUserForTextFile:(id)sender {
-  NSOpenPanel*    panel = [[NSOpenPanel openPanel] retain];
+  NSOpenPanel *panel = [[NSOpenPanel openPanel] retain];
   [panel setCanChooseDirectories:NO];
   [panel setAllowsMultipleSelection:NO];
   [panel setMessage:@"Choose the file to display."];
-  
+  [filePathLabel setStringValue:filePath];
   // Let the user select any text document.
-  [panel setAllowedFileTypes:[NSArray arrayWithObjects:@"txt", @"log", nil]];
+  [panel setAllowedFileTypes:[NSArray arrayWithObjects:@"txt", @"log", @"out", nil]];
   
   [panel beginWithCompletionHandler:^(NSInteger result){
     if (result == NSFileHandlingPanelOKButton) {
-      filePath = [[panel URLs] objectAtIndex:0];
-      NSLog(@"From panel: %@", filePath);
+      filePath = [[[panel URLs] objectAtIndex:0] path];
+      if (debug) {
+        NSLog(@"From panel: %@", [[[panel URLs] objectAtIndex:0] path]);
+      }
+      [filePathLabel setStringValue:[[[panel URLs] objectAtIndex:0] path]];
     }
     
     [panel release];
