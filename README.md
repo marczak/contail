@@ -19,3 +19,13 @@ Licensed under the Apache 2.0 license. Please see the LICENSE file for details.
 
 # Acknowledgements
 I'm using the "Apple2Forever" font from http://www.thugdome.com/software_a2f.html
+
+# Change History
+v 1.2 - 2012-05-30
+- Stop arbitrarily removing the oldest line.
+- Add more debug info.
+
+v 1.1 - 2012-04-02
+- Initial non-crashy version for release.
+
+v 1.0 - Unreleased proof of concept.
