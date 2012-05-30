@@ -43,7 +43,10 @@
 	[[NSColor blackColor] set];
 	[NSBezierPath fillRect:[self bounds]];
   NSSize windowSize = [[[self window] contentView] frame].size;
-  float fontSize = windowSize.height/75.0f;  
+  float fontSize = windowSize.height/75.0f;
+  if (debug) {
+    NSLog(@"Using fontSize %f.", fontSize);
+  }
   
   // Initialize the text matrix
 	CGContextRef context = (CGContextRef)[[NSGraphicsContext currentContext] graphicsPort];
@@ -55,17 +58,10 @@
 
   // Grab the newest data
   buffer = [fileHandle readDataToEndOfFile];
-  if ([buffer length] > 0) {
-    // remove a 'buffer length' from front of string
-    NSRange range;
-    range.location = 0;
-    range.length = [buffer length];
-    [currentData deleteCharactersInRange:range];
-    // Append the new data
-    NSString *newData = [[NSString alloc] initWithData:buffer encoding:NSUTF8StringEncoding];
-    [currentData appendString:newData];
-  }
-  
+  // Append the new data
+  NSString *newData = [[NSString alloc] initWithData:buffer encoding:NSUTF8StringEncoding];
+  [currentData appendString:newData];
+
   CTFontRef consoleFont = CTFontCreateWithName(CFSTR("Apple2Forever"), fontSize, NULL);
   NSDictionary *textAttrs = [NSDictionary dictionaryWithObjectsAndKeys:
                              [NSColor greenColor], kCTForegroundColorAttributeName,
@@ -76,7 +72,10 @@
                                                                   attributes:textAttrs];
   // Will that overflow the text area?
   NSSize logSize = [currentData sizeWithAttributes:textAttrs];
-  while (logSize.height > windowSize.height) {
+  if (debug) {
+    NSLog(@"Using win height of %f against logSize height of %f.", windowSize.height, logSize.height);
+  }
+  while (logSize.height > (windowSize.height - fontSize * 20) ) {
     // We need to lose some more from the top
     NSRange range;
     range.location = 0;
